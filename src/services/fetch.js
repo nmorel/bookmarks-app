@@ -18,6 +18,7 @@ function withQueryParams(method, url, queryParams) {
   return fetch(url, {
     method,
     headers,
+    credentials: 'same-origin',
   }).then(checkStatus);
 }
 
@@ -36,13 +37,13 @@ function withBody(method, url, body) {
     method,
     headers,
     body: JSON.stringify(body),
+    credentials: 'same-origin',
   });
 }
 
 function getDefaultHeaders() {
   return {
     Accept: 'application/json',
-    'Content-Type': 'application/json',
   };
 }
 
