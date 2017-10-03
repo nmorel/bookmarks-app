@@ -5,7 +5,10 @@
   "dependencies": {
     "husky": "^0.14.3",
     "lint-staged": "^4.2.3",
+    "lodash": "^4.17.4",
+    "node-fetch": "^1.7.3",
     "prettier": "^1.7.3",
+    "query-string": "^5.0.0",
     "react": "^16.0.0",
     "react-apollo": "^1.4.16",
     "react-dom": "^16.0.0",
@@ -15,7 +18,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prettier": "prettier --write '**/*.{js,json,prettierrc}'"
   },
