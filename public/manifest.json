@@ -1,10 +1,10 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Mes bookmarks",
+  "name": "Mes bookmarks",
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "192x192",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ],

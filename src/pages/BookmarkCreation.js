@@ -11,6 +11,13 @@ class BookmarkCreationComponent extends Component {
     error: null,
   };
 
+  componentDidMount() {
+    // The autoFocus does not work. Maybe a problem with portal ?
+    setTimeout(() => {
+      this.url.focus();
+    });
+  }
+
   onSubmit = async ev => {
     ev.preventDefault();
 
@@ -79,6 +86,7 @@ class BookmarkCreationComponent extends Component {
 
           <div>
             <input
+              ref={url => (this.url = url)}
               type="url"
               id="url"
               name="url"
