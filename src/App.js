@@ -4,6 +4,7 @@ import {ApolloProvider, ApolloClient, createNetworkInterface} from 'react-apollo
 import {ModalRoute} from './components/ModalRoute';
 import {Home} from './pages/Home';
 import {BookmarkCreation} from './pages/BookmarkCreation';
+import {BookmarkEdition} from './pages/BookmarkEdition';
 
 const networkInterface = createNetworkInterface({
   uri: `https://api.graph.cool/simple/v1/cj8926he304gk0182i7ogz5ce`,
@@ -27,6 +28,12 @@ class App extends Component {
               {/* The other routes open inside a modal */}
               <Switch>
                 <ModalRoute exact={true} path={`/add`} closeTo={`/`} component={BookmarkCreation} />
+                <ModalRoute
+                  exact={true}
+                  path={`/:id/edit`}
+                  closeTo={`/`}
+                  component={BookmarkEdition}
+                />
               </Switch>
             </main>
           </div>

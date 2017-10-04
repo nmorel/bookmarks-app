@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {gql, graphql} from 'react-apollo';
+import {BookmarkCard} from '../components/BookmarkCard';
 import {loadMetadataFromUrl} from '../services/metadata';
+import {BookmarkForm} from '../components/BookmarkForm';
 
 class BookmarkCreationComponent extends Component {
   state = {
@@ -47,7 +49,7 @@ class BookmarkCreationComponent extends Component {
       }
     } else {
       try {
-        await this.props.addBookmark({variables: this.state.bookmark});
+        await this.props.addBookmark(this.state.bookmark);
         this.props.history.push('/');
       } catch (err) {
         this.setState({
@@ -74,6 +76,13 @@ class BookmarkCreationComponent extends Component {
       },
       error: null,
     }));
+  };
+
+  onChange = bookmark => {
+    this.setState({
+      bookmark,
+      error: null,
+    });
   };
 
   render() {
@@ -127,71 +136,7 @@ class BookmarkCreationComponent extends Component {
             </p>
           )}
 
-          <div>
-            <label htmlFor="title">Titre *</label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={bookmark.title || ''}
-              onChange={this.onChangeValue}
-              required
-              style={{boxSizing: 'border-box', width: '100%', padding: 5, fontSize: 18}}
-              autoFocus={true}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="author">Auteur</label>
-            <input
-              type="text"
-              id="author"
-              name="author"
-              value={bookmark.author || ''}
-              onChange={this.onChangeValue}
-              style={{boxSizing: 'border-box', width: '100%', padding: 5, fontSize: 18}}
-            />
-          </div>
-
-          {!!bookmark.kind &&
-            bookmark.kind !== 'UNKNOWN' && [
-              <div key="width">
-                <label htmlFor="width">Largeur</label>
-                <input
-                  type="number"
-                  id="width"
-                  name="width"
-                  value={bookmark.width || ''}
-                  onChange={this.onChangeValue}
-                  style={{boxSizing: 'border-box', width: '100%', padding: 5, fontSize: 18}}
-                />
-              </div>,
-              <div key="height">
-                <label htmlFor="height">Hauteur</label>
-                <input
-                  type="number"
-                  id="height"
-                  name="height"
-                  value={bookmark.height || ''}
-                  onChange={this.onChangeValue}
-                  style={{boxSizing: 'border-box', width: '100%', padding: 5, fontSize: 18}}
-                />
-              </div>,
-            ]}
-
-          {bookmark.kind === 'VIDEO' && (
-            <div>
-              <label htmlFor="duration">Durée (en seconde)</label>
-              <input
-                type="number"
-                id="duration"
-                name="duration"
-                value={bookmark.duration || ''}
-                onChange={this.onChangeValue}
-                style={{boxSizing: 'border-box', width: '100%', padding: 5, fontSize: 18}}
-              />
-            </div>
-          )}
+          <BookmarkForm bookmark={bookmark} onChange={this.onChange} />
 
           <div style={{marginTop: 10, textAlign: 'right'}}>
             <Link to={`/`}>Annuler</Link>
@@ -232,11 +177,21 @@ const addBookmarkMutation = gql`
       thumbnailMedium: $thumbnailMedium
       thumbnailLarge: $thumbnailLarge
     ) {
-      id
+      ...BookmarkCard
     }
   }
+
+  ${BookmarkCard.fragments.bookmark}
 `;
 
-export const BookmarkCreation = graphql(addBookmarkMutation, {name: 'addBookmark'})(
-  BookmarkCreationComponent
-);
+export const BookmarkCreation = graphql(addBookmarkMutation, {
+  props({mutate}) {
+    return {
+      addBookmark(bookmark) {
+        return mutate({
+          variables: bookmark,
+        });
+      },
+    };
+  },
+})(BookmarkCreationComponent);

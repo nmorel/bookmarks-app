@@ -63,7 +63,7 @@ const ListComponent = ({data: {loading, allBookmarks = [], loadMoreEntries, hasM
   );
 };
 
-const BookmarkQuery = gql`
+const BookmarkListQuery = gql`
   query allPosts($offset: Int, $limit: Int, $maxCreatedAt: DateTime) {
     _allBookmarksMeta(filter: {createdAt_lte: $maxCreatedAt}) {
       count
@@ -74,16 +74,14 @@ const BookmarkQuery = gql`
       orderBy: createdAt_DESC
       filter: {createdAt_lte: $maxCreatedAt}
     ) {
-      id
-      url
-      title
-      thumbnailMedium
-      tags
+      ...BookmarkCard
     }
   }
+  
+  ${BookmarkCard.fragments.bookmark}
 `;
 
-const List = graphql(BookmarkQuery, {
+const List = graphql(BookmarkListQuery, {
   options({maxCreatedAt}) {
     return {
       variables: {
