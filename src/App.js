@@ -17,9 +17,9 @@ class App extends Component {
     return (
       <ApolloProvider client={client}>
         <Router>
-          <div className="App">
-            <header className="App-header">
-              <h1 className="App-title">Mes bookmarks</h1>
+          <div style={{maxWidth: 800, margin: '0 auto'}}>
+            <header>
+              <h1>Mes bookmarks</h1>
             </header>
             <main>
               {/* Home page containing the list is always visible */}

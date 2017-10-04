@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {gql, graphql} from 'react-apollo';
 import {Link} from 'react-router-dom';
+import {BookmarkCard} from '../components/BookmarkCard';
 
 export class HomeComponent extends Component {
   componentWillReceiveProps(nextProps) {
@@ -19,9 +20,22 @@ export class HomeComponent extends Component {
 
     return (
       <div>
-        <Link to={`/add`}>Ajouter un lien</Link>
+        <div style={{textAlign: 'right'}}>
+          <Link to={`/add`}>Ajouter un lien</Link>
+        </div>
         {!loading && (
-          <ul>{allBookmarks.map(bookmark => <li key={bookmark.id}>{bookmark.url}</li>)}</ul>
+          <ul style={{listStyle: 'none', margin: 0, padding: 0}}>
+            {allBookmarks.map((bookmark, index) => (
+              <li
+                key={bookmark.id}
+                style={
+                  index > 0 ? {marginTop: 10, paddingTop: 10, borderTop: '1px solid grey'} : {}
+                }
+              >
+                <BookmarkCard bookmark={bookmark} />
+              </li>
+            ))}
+          </ul>
         )}
       </div>
     );
@@ -33,6 +47,9 @@ const BookmarkQuery = gql`
     allBookmarks(orderBy: createdAt_DESC) {
       id
       url
+      title
+      thumbnailMedium
+      tags
     }
   }
 `;
