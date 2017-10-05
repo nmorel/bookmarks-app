@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import {gql, graphql} from 'react-apollo';
+import {gql, graphql, compose} from 'react-apollo';
+import {connect} from 'react-redux';
 import {BookmarkCard} from '../components/BookmarkCard';
 import {loadMetadataFromUrl} from '../services/metadata';
 import {BookmarkForm} from '../components/BookmarkForm';
+import {BookmarkListQuery} from '../pages/Home';
 
 class BookmarkCreationComponent extends Component {
   state = {
@@ -184,14 +186,23 @@ const addBookmarkMutation = gql`
   ${BookmarkCard.fragments.bookmark}
 `;
 
-export const BookmarkCreation = graphql(addBookmarkMutation, {
-  props({mutate}) {
-    return {
-      addBookmark(bookmark) {
-        return mutate({
-          variables: bookmark,
-        });
-      },
-    };
-  },
-})(BookmarkCreationComponent);
+export const BookmarkCreation = compose(
+  connect(({bookmarkListVariables}) => ({bookmarkListVariables})),
+  graphql(addBookmarkMutation, {
+    props({mutate, ownProps: {bookmarkListVariables}}) {
+      return {
+        addBookmark(bookmark) {
+          return mutate({
+            variables: bookmark,
+            refetchQueries: [
+              {
+                query: BookmarkListQuery,
+                variables: bookmarkListVariables,
+              },
+            ],
+          });
+        },
+      };
+    },
+  })
+)(BookmarkCreationComponent);

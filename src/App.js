@@ -1,22 +1,15 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import {ApolloProvider, ApolloClient, createNetworkInterface} from 'react-apollo';
+import {ApolloAndReduxProvider} from './ApolloAndReduxProvider';
 import {ModalRoute} from './components/ModalRoute';
 import {Home} from './pages/Home';
 import {BookmarkCreation} from './pages/BookmarkCreation';
 import {BookmarkEdition} from './pages/BookmarkEdition';
 
-const networkInterface = createNetworkInterface({
-  uri: `https://api.graph.cool/simple/v1/cj8926he304gk0182i7ogz5ce`,
-});
-const client = new ApolloClient({
-  networkInterface,
-});
-
 class App extends Component {
   render() {
     return (
-      <ApolloProvider client={client}>
+      <ApolloAndReduxProvider>
         <Router>
           <div style={{maxWidth: 800, margin: '0 auto'}}>
             <header>
@@ -38,7 +31,7 @@ class App extends Component {
             </main>
           </div>
         </Router>
-      </ApolloProvider>
+      </ApolloAndReduxProvider>
     );
   }
 }

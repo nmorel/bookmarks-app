@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
-import {gql, graphql} from 'react-apollo';
+import {gql, graphql, compose} from 'react-apollo';
+import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {EditIcon, DeleteIcon} from './Icon';
 import {Modal} from './Modal';
+import {BookmarkListQuery} from '../pages/Home';
 
 class BookmarkCardComponent extends Component {
   static fragments = {
@@ -133,14 +135,23 @@ const deleteBookmarkMutation = gql`
   }
 `;
 
-export const BookmarkCard = graphql(deleteBookmarkMutation, {
-  props({mutate}) {
-    return {
-      deleteBookmark(bookmark) {
-        return mutate({
-          variables: bookmark,
-        });
-      },
-    };
-  },
-})(BookmarkCardComponent);
+export const BookmarkCard = compose(
+  connect(({bookmarkListVariables}) => ({bookmarkListVariables})),
+  graphql(deleteBookmarkMutation, {
+    props({mutate, ownProps: {bookmarkListVariables}}) {
+      return {
+        deleteBookmark(bookmark) {
+          return mutate({
+            variables: bookmark,
+            refetchQueries: [
+              {
+                query: BookmarkListQuery,
+                variables: bookmarkListVariables,
+              },
+            ],
+          });
+        },
+      };
+    },
+  })
+)(BookmarkCardComponent);
