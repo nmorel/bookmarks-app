@@ -1,4 +1,5 @@
 import React from 'react';
+import {TagsInput} from './TagsInput';
 
 export const BookmarkForm = ({bookmark, onChange}) => {
   const onChangeValue = ev => {
@@ -15,6 +16,12 @@ export const BookmarkForm = ({bookmark, onChange}) => {
       [name]: value,
     });
   };
+
+  const onChangeTags = tags =>
+    onChange({
+      ...bookmark,
+      tags,
+    });
 
   return (
     <div>
@@ -83,6 +90,11 @@ export const BookmarkForm = ({bookmark, onChange}) => {
           />
         </div>
       )}
+
+      <div>
+        <label htmlFor="duration">Durée (en seconde)</label>
+        <TagsInput value={bookmark.tags} onChange={onChangeTags} />
+      </div>
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import {get} from './fetch';
-import _keyBy from 'lodash/keyBy';
 
 const providers = [
   {
@@ -58,7 +57,10 @@ const providers = [
         }
         metadata = metadata.photo;
 
-        const photos = _keyBy(metadata.sizes.size, 'label');
+        const photos = metadata.sizes.size.reduce((acc, photo) => {
+          acc[photo.label] = photo;
+          return acc;
+        }, {});
 
         const originalPhoto =
           photos['Original'] ||
