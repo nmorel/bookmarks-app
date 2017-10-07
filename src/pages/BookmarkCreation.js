@@ -7,9 +7,12 @@ import {loadMetadataFromUrl} from '../services/metadata';
 import {BookmarkForm} from '../components/BookmarkForm';
 import {BookmarkListQuery} from '../pages/Home';
 
+const stepUrl = 1;
+const stepInfos = 2;
+
 class BookmarkCreationComponent extends Component {
   state = {
-    step: 0,
+    step: stepUrl,
     bookmark: {kind: 'UNKNOWN'},
     loading: false,
     error: null,
@@ -30,16 +33,16 @@ class BookmarkCreationComponent extends Component {
       error: null,
     });
 
-    if (this.state.step === 0) {
+    if (this.state.step === stepUrl) {
       if (this.state.error) {
-        this.setState({step: 1, loading: false});
+        this.setState({step: stepInfos, loading: false});
         return;
       }
 
       try {
         const bookmark = await loadMetadataFromUrl(this.state.bookmark.url);
         this.setState({
-          step: 1,
+          step: stepInfos,
           bookmark,
           loading: false,
         });
@@ -90,36 +93,48 @@ class BookmarkCreationComponent extends Component {
   render() {
     const {step, bookmark, loading, error} = this.state;
 
-    if (step === 0) {
+    if (step === stepUrl) {
       return (
         <form onSubmit={this.onSubmit}>
-          <h1 style={{margin: '0 0 10px 0'}}>(1) Saisissez ou collez l'url</h1>
+          <h3>Saisissez ou collez le lien</h3>
 
           <div>
-            <input
-              ref={url => (this.url = url)}
-              type="url"
-              id="url"
-              name="url"
-              value={bookmark.url || ''}
-              onChange={this.onChangeValue}
-              required
-              style={{boxSizing: 'border-box', width: '100%', padding: 5, fontSize: 18}}
-              autoFocus={true}
-            />
+            <label>
+              <input
+                ref={url => (this.url = url)}
+                type="url"
+                id="url"
+                name="url"
+                value={bookmark.url || ''}
+                onChange={this.onChangeValue}
+                required
+                autoFocus={true}
+                aria-describedby="urlHelpText"
+                placeholder="https://vimeo.com/20853149"
+              />
+            </label>
+            <p className="help-text" id="urlHelpText">
+              Si vous saisissez un lien <a href="https://vimeo.com/">Vimeo</a> ou{' '}
+              <a href="https://www.flickr.com/">Flickr</a>, les données associées (titre, image,
+              auteur, etc...) seront automatiquement récupérées.
+              <br />
+              Exemple : https://vimeo.com/20853149
+            </p>
           </div>
 
           {!!error && (
-            <p style={{color: 'red'}}>
+            <p className="error">
               Une erreur est survenue durant la récupération des informations.
               <br />
               Vérifiez votre url ou poursuivez pour saisir les informations manuellement.
             </p>
           )}
 
-          <div style={{marginTop: 10, textAlign: 'right'}}>
-            <Link to={`/`}>Annuler</Link>
-            <button type="submit" disabled={loading}>
+          <div className="ButtonGroup">
+            <Link className="button hollow secondary" to={`/`}>
+              Annuler
+            </Link>
+            <button type="submit" className="button" disabled={loading}>
               {error ? `Saisir les infos manuellement` : `Valider`}
             </button>
           </div>
@@ -128,10 +143,19 @@ class BookmarkCreationComponent extends Component {
     } else {
       return (
         <form onSubmit={this.onSubmit}>
-          <h1 style={{margin: '0 0 10px 0'}}>(2) Vérifiez les informations</h1>
+          <h3>
+            {bookmark.service
+              ? `Vérifiez les informations obtenues de ${bookmark.service}`
+              : `Saisissez les informations du lien`}
+          </h3>
+          {bookmark.service ? (
+            <p>Les informations suivantes ont été obtenues de {bookmark.service}.</p>
+          ) : (
+            <p>Aucune information n'a pu être extraite du lien.</p>
+          )}
 
           {!!error && (
-            <p style={{color: 'red'}}>
+            <p className="error">
               Une erreur est survenue durant la sauvegarde.
               <br />
               {error.message}
@@ -140,9 +164,18 @@ class BookmarkCreationComponent extends Component {
 
           <BookmarkForm bookmark={bookmark} onChange={this.onChange} />
 
-          <div style={{marginTop: 10, textAlign: 'right'}}>
-            <Link to={`/`}>Annuler</Link>
-            <button type="submit" disabled={loading}>
+          <div className="ButtonGroup">
+            <button
+              type="button"
+              className="button hollow left"
+              onClick={() => this.setState({step: stepUrl})}
+            >
+              &larr; Revenir
+            </button>
+            <Link className="button hollow secondary" to={`/`}>
+              Annuler
+            </Link>
+            <button type="submit" className="button" disabled={loading}>
               {error ? `Saisir les infos manuellement` : `Ajouter`}
             </button>
           </div>

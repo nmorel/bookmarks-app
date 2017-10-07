@@ -6,13 +6,14 @@ import {connect} from 'react-redux';
 import {goToPage} from '../ducks/bookmarkListVariables';
 import {BookmarkCard} from '../components/BookmarkCard';
 import {Pagination} from '../components/Pagination';
+import {AddIcon} from '../components/Icon';
 
 export function Home() {
   return (
-    <div>
-      <div style={{textAlign: 'right'}}>
-        <Link to={`/add`}>Ajouter un lien</Link>
-      </div>
+    <div className="Home">
+      <Link className="Home-AddButton" to={`/add`}>
+        <AddIcon />
+      </Link>
       <List />
     </div>
   );
@@ -30,12 +31,9 @@ const ListComponent = ({
     <div>
       {pagination}
       {bookmarks.length ? (
-        <ul style={{listStyle: 'none', margin: 0, padding: 0}}>
+        <ul className="Home-List">
           {bookmarks.map((bookmark, index) => (
-            <li
-              key={bookmark.id}
-              style={index > 0 ? {marginTop: 10, paddingTop: 10, borderTop: '1px solid grey'} : {}}
-            >
+            <li key={bookmark.id} className="Home-List-Item">
               <BookmarkCard bookmark={bookmark} />
             </li>
           ))}

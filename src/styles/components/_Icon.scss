@@ -1,0 +1,10 @@
+.Icon {
+  width: rem-calc(24);
+  height: rem-calc(24);
+  fill: color(grey, medium);
+  transition: fill $global-transition-duration;
+
+  &:hover {
+    fill: color(primary);
+  }
+}

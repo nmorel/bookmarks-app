@@ -1,1 +1,30 @@
+@charset "utf-8";
+@import '../../node_modules/foundation-sites/scss/util/util';
+
+@import 'common/colors';
+@import 'common/settings';
+@import '../../node_modules/foundation-sites/scss/foundation';
+@import 'common/foundation-components';
+
+a {
+  transition: color $global-transition-duration;
+}
+
+.App {
+  max-width: rem-calc(860);
+  margin: 0 auto;
+  padding: rem-calc(20);
+}
+
+p.error {
+  color: $alert-color;
+}
+
+@import './components/ButtonGroup';
+@import './components/BookmarkCard';
+@import './components/Icon';
+@import './components/Modal';
+@import './components/Pagination';
 @import './components/TagsInput';
+
+@import './pages/Home';

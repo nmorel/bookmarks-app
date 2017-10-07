@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 
 const gap = '...';
 
@@ -89,7 +90,7 @@ export const Pagination = ({offset, limit, total, goToPage}) => {
   const pages = calculateButtonsPage(offset, limit, total);
   const currentPage = offset / limit;
   return (
-    <div style={{textAlign: 'center', margin: 10}}>
+    <div className="Pagination">
       {pages.map((page, index) => (
         <Button key={index} page={page} goToPage={goToPage} selected={page === currentPage} />
       ))}
@@ -99,23 +100,17 @@ export const Pagination = ({offset, limit, total, goToPage}) => {
 
 const Button = ({page, goToPage, selected}) => {
   const fake = page === gap;
+  const onClick = () => {
+    goToPage(page);
+    // We scroll back to top
+    window.scroll(0, 0);
+  };
   return (
     <button
       type="button"
       disabled={fake}
-      onClick={() => goToPage(page)}
-      style={{
-        fontSize: 14,
-        borderRadius: 0,
-        border: '1px solid grey',
-        borderLeftWidth: !!page ? 0 : 1,
-        backgroundColor: selected ? 'rgb(58, 58, 199)' : '#DDD',
-        color: selected ? '#fff' : '#000',
-        padding: 5,
-        minWidth: 40,
-        cursor: fake ? 'not-allowed' : 'pointer',
-        outline: 0,
-      }}
+      onClick={onClick}
+      className={cn('Pagination-Button', {fake, active: selected})}
     >
       {fake ? page : page + 1}
     </button>

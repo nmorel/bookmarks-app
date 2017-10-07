@@ -32,18 +32,23 @@ class BookmarkCardComponent extends Component {
   render() {
     const {bookmark} = this.props;
     return (
-      <div style={{display: 'flex', justifyContent: 'space-between'}}>
+      <div className="BookmarkCard">
         {this.state.showDelete && (
           <Modal onClose={this.onCancelDelete}>
-            <p>Confirmer la suppression de {bookmark.title} ?</p>
-            <div style={{marginTop: 10, textAlign: 'right'}}>
-              <button type="button" onClick={this.onCancelDelete}>
+            <h4>Confirmer la suppression de {bookmark.title} ?</h4>
+            <p>La suppression est définitive.</p>
+            <div className="ButtonGroup">
+              <button
+                type="button"
+                className="button hollow secondary"
+                onClick={this.onCancelDelete}
+              >
                 Annuler
               </button>
               <button
                 type="button"
+                className="button alert"
                 autoFocus={true}
-                style={{backgroundColor: 'red'}}
                 onClick={this.onDelete}
               >
                 Supprimer
@@ -52,70 +57,46 @@ class BookmarkCardComponent extends Component {
           </Modal>
         )}
 
-        <div
-          style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30%'}}
-        >
+        <div className="BookmarkCard-ImageContainer">
           <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
             <img src={bookmark.thumbnailMedium} alt={bookmark.title} style={{width: '100%'}} />
           </a>
         </div>
-        <div
-          style={{
-            width: '68%',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            <a
-              href={bookmark.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{color: 'inherit', textDecoration: 'none', overflow: 'hidden'}}
-            >
-              <h1 style={{margin: '0 0 5px 0'}}>{bookmark.title}</h1>
-              <div style={{fontSize: 14, color: '#AEAEAE'}}>
+
+        <div className="BookmarkCard-InfosContainer">
+          <div className="BookmarkCard-InfosWrapper">
+            <div className="BookmarkCard-Infos">
+              <h2 className="BookmarkCard-Title">
+                <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
+                  {bookmark.title}
+                </a>
+              </h2>
+
+              <div className="BookmarkCard-Author">
                 Ajouté le {new Date(bookmark.createdAt).toLocaleDateString()}
                 {!!bookmark.author && ` - Auteur : ${bookmark.author}`}
               </div>
-              <div
-                style={{
-                  margin: 0,
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'ellipsis',
-                  fontStyle: 'italic',
-                }}
-              >
-                {bookmark.url}
-              </div>
-            </a>
-            <div>
-              <Link to={`/${bookmark.id}/edit`} style={{display: 'block'}}>
-                <EditIcon />
-              </Link>
-              <div style={{cursor: 'pointer'}} onClick={this.onShowDelete}>
-                <DeleteIcon />
+              <div className="BookmarkCard-Url">
+                <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
+                  {bookmark.url}
+                </a>
               </div>
             </div>
+            <div className="BookmarkCard-Actions">
+              <Link to={`/${bookmark.id}/edit`}>
+                <EditIcon />
+              </Link>
+              <button type="button" onClick={this.onShowDelete}>
+                <DeleteIcon />
+              </button>
+            </div>
           </div>
+
           {!!bookmark.tags &&
             !!bookmark.tags.length && (
-              <div style={{marginTop: 5}}>
+              <div className="BookmarkCard-Tags">
                 {bookmark.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    style={{
-                      display: 'inline-block',
-                      padding: 5,
-                      marginRight: 5,
-                      marginBottom: 5,
-                      backgroundColor: 'lightgrey',
-                      borderRadius: 4,
-                      fontSize: 12,
-                    }}
-                  >
+                  <span key={index} className="BookmarkCard-Tag">
                     {tag}
                   </span>
                 ))}

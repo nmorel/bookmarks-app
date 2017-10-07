@@ -11,7 +11,7 @@ class App extends Component {
     return (
       <ApolloAndReduxProvider>
         <Router>
-          <div style={{maxWidth: 800, margin: '0 auto'}}>
+          <div className="App">
             <header>
               <h1>Mes bookmarks</h1>
             </header>

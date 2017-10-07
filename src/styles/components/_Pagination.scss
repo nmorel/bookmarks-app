@@ -1,0 +1,35 @@
+.Pagination {
+  text-align: center;
+  margin: rem-calc(20);
+
+  &-Button {
+    font-size: rem-calc(14);
+    border-radius: 0;
+    border-left: rem-calc(1) solid color(white);
+    background-color: color(grey, light);
+    padding: rem-calc(10) rem-calc(5);
+    min-width: rem-calc(40);
+    cursor: pointer;
+    outline: 0;
+    transition: background-color $global-transition-duration;
+
+    &:first-child {
+      border-left-width: rem-calc(1);
+    }
+
+    &:not(.active):hover {
+      background-color: color(secondary);
+      color: color(white);
+    }
+
+    &.active {
+      background-color: color(primary);
+      color: color(white);
+      cursor: default;
+    }
+
+    &.fake {
+      cursor: not-allowed;
+    }
+  }
+}

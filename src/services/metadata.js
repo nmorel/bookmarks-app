@@ -14,6 +14,7 @@ const providers = [
         metadata = metadata && metadata[0];
         return {
           url,
+          service: this.service,
           kind: 'VIDEO',
           title: metadata.title,
           description: metadata.description,
@@ -78,6 +79,7 @@ const providers = [
 
         return {
           url,
+          service: this.service,
           kind: 'PHOTO',
           title: metadata.title._content,
           description: metadata.description._content,
@@ -109,6 +111,6 @@ export async function loadMetadataFromUrl(url) {
   if (provider) {
     return await provider.fetch(url);
   } else {
-    throw new Error(`Url ${url} does not match a supported provider.`);
+    return {url};
   }
 }

@@ -1,0 +1,68 @@
+.BookmarkCard {
+  display: flex;
+  justify-content: space-between;
+
+  &-ImageContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+  }
+
+  &-InfosContainer {
+    width: 68%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &-InfosWrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &-Infos {
+    overflow: hidden;
+  }
+
+  &-Title {
+    margin-bottom: rem-calc(2);
+  }
+
+  &-Author {
+    color: color(grey, base);
+  }
+
+  &-Url {
+    display: block;
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-style: italic;
+  }
+
+  &-Tags {
+    margin-top: rem-calc(8);
+  }
+
+  &-Tag {
+    display: inline-block;
+    padding: rem-calc(5);
+    margin-right: rem-calc(5);
+    margin-bottom: rem-calc(5);
+    background-color: color(grey, light);
+    border-radius: $global-radius;
+    font-size: rem-calc(12);
+  }
+
+  &-Actions {
+    a,
+    button {
+      display: block;
+      padding: rem-calc(5);
+      cursor: pointer;
+      outline: 0;
+    }
+  }
+}

@@ -1,0 +1,21 @@
+// color variable map
+$colors: (
+  black: #1f2e31,
+  white: #fff,
+  background: #f9f9f9,
+  primary: #2ca59e,
+  secondary: #659ba7,
+  alert: #f42f44,
+  grey: (light: #f0f0f0, base: #b5b5b5, medium: #d5d5d5, dark: #6d6d6d)
+);
+
+// retrieve color from $colors map ie. `color(base, primary)`
+@function color($color-name, $color-variant:null) {
+  // color variant is optional
+  @if ($color-variant != null) {
+    // map inception
+    @return map-get(map-get($colors, $color-name), $color-variant);
+  } @else {
+    @return map-get($colors, $color-name);
+  }
+}

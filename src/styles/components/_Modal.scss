@@ -1,0 +1,27 @@
+.Modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(10, 10, 10, 0.45);
+  z-index: 1000;
+  overflow-y: scroll;
+
+  &-Panel {
+    background-color: color(white);
+    position: relative;
+    padding: rem-calc(20);
+
+    @include breakpoint(small only) {
+      height: 100%;
+      overflow-y: scroll;
+    }
+
+    @include breakpoint(medium) {
+      margin: rem-calc(80px) auto;
+      width: 90%;
+      max-width: 760px;
+    }
+  }
+}

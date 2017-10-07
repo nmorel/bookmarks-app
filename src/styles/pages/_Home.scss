@@ -1,0 +1,44 @@
+.Home {
+  $add-button-width: rem-calc(60);
+  &-AddButton {
+    position: fixed;
+    right: rem-calc(30);
+    bottom: rem-calc(30);
+    width: rem-calc($add-button-width);
+    height: rem-calc($add-button-width);
+    background-color: color(primary);
+    border-radius: $add-button-width / 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color $global-transition-duration;
+
+    .Icon {
+      width: $add-button-width / 2;
+      height: $add-button-width / 2;
+      fill: color(white);
+    }
+
+    &:hover {
+      background-color: color(secondary);
+    }
+  }
+
+  &-List {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    &-Item {
+      margin-top: rem-calc(10);
+      padding-top: rem-calc(10);
+      border-top: rem-calc(1) solid color(grey, medium);
+
+      &:last-child {
+        border-bottom: rem-calc(1) solid color(grey, medium);
+        margin-bottom: rem-calc(10);
+        padding-bottom: rem-calc(10);
+      }
+    }
+  }
+}

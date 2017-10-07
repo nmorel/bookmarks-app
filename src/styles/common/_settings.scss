@@ -1,0 +1,74 @@
+$font-family-default: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+// Foundation settings
+// ---------
+
+// Global
+$global-font-size: 87.5%;
+$global-width: rem-calc(1200);
+$global-lineheight: 1.4;
+$foundation-palette: (
+  primary: color(primary),
+  secondary: color(secondary),
+  success: #3adb76,
+  warning: #ffae00,
+  alert: #cc4b37
+);
+$light-gray: color(grey, light);
+$medium-gray: color(grey, medium);
+$dark-gray: color(grey, dark);
+$black: color(black);
+$white: color(white);
+$body-background: color(background);
+$body-font-color: $dark-gray;
+$body-font-family: $font-family-default;
+$body-antialiased: true;
+$global-margin: rem-calc(30);
+$global-padding: 1rem;
+$global-weight-normal: normal;
+$global-weight-bold: bold;
+$global-radius: rem-calc(4);
+$global-text-direction: ltr;
+$global-flexbox: false;
+
+@include add-foundation-colors;
+
+// Typography
+$header-font-family: $font-family-default;
+$header-font-weight: $global-weight-normal;
+$header-font-style: normal;
+$font-family-monospace: Consolas, 'Liberation Mono', Courier, monospace;
+$header-color: inherit;
+$header-small-font-color: $header-color;
+$header-lineheight: 1.4;
+$header-margin-bottom: 0.5rem;
+$header-styles: (
+  small:
+    (
+      'h1': ('font-size': 24),
+      'h2': ('font-size': 20),
+      'h3': ('font-size': 19),
+      'h4': ('font-size': 18),
+      'h5': ('font-size': 17),
+      'h6': ('font-size': 16)
+    ),
+  medium:
+    (
+      'h1': ('font-size': 48),
+      'h2': ('font-size': 40),
+      'h3': ('font-size': 31),
+      'h4': ('font-size': 25),
+      'h5': ('font-size': 20),
+      'h6': ('font-size': 16)
+    )
+);
+$anchor-color: $dark-gray;
+$anchor-color-hover: color(primary);
+
+// Transition
+$global-transition-duration: 0.3s;
+
+// Form
+$input-shadow: none;
+$input-shadow-focus: none;
+$input-border-focus: rem-calc(1) solid color(primary);

@@ -26,6 +26,21 @@ export const BookmarkForm = ({bookmark, onChange}) => {
   return (
     <div>
       <div>
+        <label htmlFor="url">Lien *</label>
+        <input
+          ref={url => (this.url = url)}
+          type="url"
+          id="url"
+          name="url"
+          value={bookmark.url || ''}
+          onChange={this.onChangeValue}
+          required
+          disabled
+          placeholder="https://vimeo.com/20853149"
+        />
+      </div>
+
+      <div>
         <label htmlFor="title">Titre *</label>
         <input
           type="text"
@@ -92,8 +107,10 @@ export const BookmarkForm = ({bookmark, onChange}) => {
       )}
 
       <div>
-        <label htmlFor="duration">Durée (en seconde)</label>
-        <TagsInput value={bookmark.tags} onChange={onChangeTags} />
+        <label>
+          Tags
+          <TagsInput value={bookmark.tags || []} onChange={onChangeTags} />
+        </label>
       </div>
     </div>
   );

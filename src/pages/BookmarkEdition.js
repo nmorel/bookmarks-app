@@ -67,10 +67,11 @@ class BookmarkEditionComponent extends Component {
     return (
       <form onSubmit={this.onSubmit}>
         <BookmarkForm bookmark={bookmark} onChange={this.onChange} />
-
-        <div style={{marginTop: 10, textAlign: 'right'}}>
-          <Link to={`/`}>Annuler</Link>
-          <button type="submit" disabled={loading || !!error}>
+        <div className="ButtonGroup">
+          <Link className="button hollow secondary" to={`/`}>
+            Annuler
+          </Link>
+          <button type="submit" className="button" disabled={loading || !!error}>
             Modifier
           </button>
         </div>

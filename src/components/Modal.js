@@ -4,9 +4,21 @@ import ReactDOM from 'react-dom';
 
 const modalRoot = document.getElementById('modal');
 
+// When a modal is open, we want to remove the scroll from the body.
+// Otherwise, the user will be able to scroll the content below the modal.
+// We keep the counter outside the modal because multiple modal can be open at same time.
+let counterModalOpen = 0;
+const updateBody = () => {
+  if (counterModalOpen > 0) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = 'auto';
+  }
+};
+
 /**
  * Component using React 16 createPortal API.
- * @see https://reactjs.org/docs/portals.html
+ * @see {@link https://reactjs.org/docs/portals.html}
  */
 export class Modal extends Component {
   static propTypes = {
@@ -16,58 +28,30 @@ export class Modal extends Component {
   el = document.createElement('div');
 
   componentDidMount() {
+    counterModalOpen++;
+    updateBody();
     modalRoot.appendChild(this.el);
   }
 
   componentWillUnmount() {
+    counterModalOpen--;
+    updateBody();
     modalRoot.removeChild(this.el);
   }
 
   render() {
     return ReactDOM.createPortal(
-      <div
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(10, 10, 10, 0.45)',
-          overflowY: 'scroll',
-          zIndex: 1000,
-        }}
-        onClick={this.props.onClose}
-      >
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: '#fff',
-              position: 'relative',
-              padding: 20,
-              minWidth: 400,
-            }}
-            onClick={ev => ev.stopPropagation()}
+      <div className="Modal" onClick={this.props.onClose}>
+        <div className="Modal-Panel" onClick={ev => ev.stopPropagation()}>
+          <button
+            className="close-button"
+            aria-label="Close alert"
+            type="button"
+            onClick={this.props.onClose}
           >
-            <div
-              style={{
-                position: 'absolute',
-                top: 5,
-                right: 5,
-                cursor: 'pointer',
-              }}
-              onClick={this.props.onClose}
-            >
-              X
-            </div>
-            {this.props.children}
-          </div>
+            <span aria-hidden="true">&times;</span>
+          </button>
+          {this.props.children}
         </div>
       </div>,
       this.el

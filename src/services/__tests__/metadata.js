@@ -11,8 +11,10 @@ it(`returns empty object for empty url`, async () => {
   await expect(loadMetadataFromUrl('')).resolves.toEqual({});
 });
 
-it(`fails if the url does not match vimeo or flickr url`, async () => {
-  await expect(loadMetadataFromUrl('http://mylife.com/abcd')).rejects.toBeDefined();
+it(`returns no additional data if the url does not match vimeo or flickr url`, async () => {
+  await expect(loadMetadataFromUrl('http://mylife.com/abcd')).resolves.toEqual({
+    url: 'http://mylife.com/abcd',
+  });
 });
 
 it(`fails if the vimeo api fails or the video is not found`, async () => {
@@ -21,6 +23,7 @@ it(`fails if the vimeo api fails or the video is not found`, async () => {
 
 it(`retrieves the vimeo metadata`, async () => {
   const match = {
+    service: 'Vimeo',
     title: 'Sarah Drasner - SVG can do that?!',
     author: 'Frontend Conference Zurich',
     width: 1920,
@@ -49,6 +52,7 @@ it(`fails if the flickr api fails or the photo is not found`, async () => {
 
 it(`retrieves the flickr metadata`, async () => {
   const match = {
+    service: 'Flickr',
     title: 'The Bunker',
     author: 'Peter Stewart',
     width: 1600,
