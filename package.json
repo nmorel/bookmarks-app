@@ -32,7 +32,9 @@
     "build": "npm run build-css && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prettier": "prettier --write '**/*.{js,scss,json,prettierrc}'"
+    "prettier": "prettier --write '**/*.{js,scss,json,prettierrc}'",
+    "predeploy": "npm run build",
+    "deploy": "firebase deploy"
   },
   "lint-staged": {
     "**/*.+(js|scss|json|prettierrc)": [
