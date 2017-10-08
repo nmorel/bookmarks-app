@@ -108,12 +108,12 @@ export class BookmarkForm extends Component {
 
         <FormInput
           property="tags"
-          renderLabel={props => <label {...props}>Tags</label>}
+          renderLabel={props => <label {...props}>Mots-clés</label>}
           renderInput={props => (
             <TagsInput
               inputProps={{
                 ...props,
-                placeholder: 'Ajouter un tag',
+                placeholder: 'Ajouter un mot-clé',
               }}
               value={bookmark.tags || []}
               onChange={this.onChangeTags}
