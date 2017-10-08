@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "algoliasearch": "^3.24.5",
     "classnames": "^2.2.5",
     "foundation-sites": "6.4.3",
     "prop-types": "^15.6.0",

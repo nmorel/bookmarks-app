@@ -55,6 +55,7 @@ class BookmarkEditionComponent extends Component {
       await this.props.updateBookmark(this.state.bookmark);
       this.props.history.push('/');
     } catch (err) {
+      console.error('An error occured on edition', err);
       this.setState({
         loading: false,
         error: err,
@@ -69,6 +70,13 @@ class BookmarkEditionComponent extends Component {
     return (
       <form onSubmit={this.onSubmit}>
         <BookmarkForm loading={loading} bookmark={bookmark} onChange={this.onChange} />
+        {!!error && (
+          <p className="error">
+            Une erreur est survenue durant la sauvegarde.
+            <br />
+            {error.message}
+          </p>
+        )}
         <div className="ButtonGroup">
           <Link className="button hollow secondary" to={`/`}>
             Annuler

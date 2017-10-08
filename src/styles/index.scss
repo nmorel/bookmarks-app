@@ -20,6 +20,8 @@ p.error {
   color: $alert-color;
 }
 
+@import './components/Header';
+@import './components/Footer';
 @import './components/ButtonGroup';
 @import './components/BookmarkCard';
 @import './components/Icon';

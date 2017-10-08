@@ -1,0 +1,18 @@
+.Footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    width: 30%;
+    margin: 0 0 0 rem-calc(10);
+  }
+
+  @include breakpoint(small only) {
+    flex-direction: column;
+    svg {
+      width: 30%;
+      margin: rem-calc(10) 0 0 0;
+    }
+  }
+}

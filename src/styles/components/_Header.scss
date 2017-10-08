@@ -1,0 +1,29 @@
+.Header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @include breakpoint(small only) {
+    flex-direction: column;
+  }
+
+  .SearchContainer {
+    position: relative;
+    .Icon {
+      position: absolute;
+      left: rem-calc(5);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    input {
+      width: rem-calc(300);
+      margin: 0;
+      padding-left: rem-calc(30);
+
+      &:focus + .Icon {
+        fill: color(primary);
+      }
+    }
+  }
+}

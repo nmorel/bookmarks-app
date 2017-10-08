@@ -2,6 +2,7 @@
 This application is a [React](https://reactjs.org/) frontend bootstrapped with [create-react-app](https://github.com/facebookincubator/create-react-app).
 The bookmarks are stored on [Graphcool](https://www.graph.cool/), a GraphQL server.
 It uses [Apollo](https://www.apollodata.com/) as GraphQL client.
+The search is powered by [Algolia](https://www.algolia.com/).
 
 The application is hosted on [Firebase](https://firebase.google.com/) and available at [bookmarks.morel.pro](https://bookmarks.morel.pro/).
 

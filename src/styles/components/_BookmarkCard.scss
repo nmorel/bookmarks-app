@@ -75,6 +75,12 @@
     }
   }
 
+  // Search highlight
+  em {
+    font-style: inherit;
+    background-color: yellow;
+  }
+
   @include breakpoint(small only) {
     flex-direction: column;
     &-ImageContainer {

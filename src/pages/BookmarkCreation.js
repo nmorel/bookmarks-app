@@ -83,6 +83,7 @@ class BookmarkCreationComponent extends Component {
       await this.props.addBookmark(this.state.bookmark);
       this.props.history.push('/');
     } catch (err) {
+      console.error('An error occured on creation', err);
       this.setState({
         loading: false,
         error: err,
@@ -159,6 +160,8 @@ class BookmarkCreationComponent extends Component {
             <p>Aucune information n'a pu être extraite du lien.</p>
           )}
 
+          <BookmarkForm bookmark={bookmark} onChange={this.onChange} />
+
           {!!error && (
             <p className="error">
               Une erreur est survenue durant la sauvegarde.
@@ -166,8 +169,6 @@ class BookmarkCreationComponent extends Component {
               {error.message}
             </p>
           )}
-
-          <BookmarkForm bookmark={bookmark} onChange={this.onChange} />
 
           <div className="ButtonGroup">
             <button
