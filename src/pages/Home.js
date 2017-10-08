@@ -40,17 +40,21 @@ const ListComponent = ({
     <div>
       {pagination}
       <ul className="Home-List">
-        {loading
-          ? [...Array(limit).keys()].map(index => (
-              <li key={index} className="Home-List-Item">
-                <BookmarkCard stub />
-              </li>
-            ))
-          : bookmarks.map((bookmark, index) => (
-              <li key={bookmark.id} className="Home-List-Item">
-                <BookmarkCard bookmark={bookmark} />
-              </li>
-            ))}
+        {loading ? (
+          [...Array(limit).keys()].map(index => (
+            <li key={index} className="Home-List-Item">
+              <BookmarkCard stub />
+            </li>
+          ))
+        ) : bookmarks.length ? (
+          bookmarks.map((bookmark, index) => (
+            <li key={bookmark.id} className="Home-List-Item">
+              <BookmarkCard bookmark={bookmark} />
+            </li>
+          ))
+        ) : (
+          <p className="Home-List-NoResult">Désolé, nous n'avons trouvé aucun résultat.</p>
+        )}
       </ul>
       {pagination}
     </div>
