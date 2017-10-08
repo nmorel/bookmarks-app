@@ -41,7 +41,11 @@ export class Modal extends Component {
 
   render() {
     return ReactDOM.createPortal(
-      <div className="Modal" onClick={this.props.onClose}>
+      <div
+        className="Modal"
+        onClick={this.props.onClose}
+        onKeyDown={ev => ev.keyCode === 27 && this.props.onClose()}
+      >
         <div className="Modal-Panel" onClick={ev => ev.stopPropagation()}>
           <button
             className="close-button"
