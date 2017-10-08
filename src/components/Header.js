@@ -20,6 +20,7 @@ export const Header = connect(
           placeholder="Rechercher un favori..."
           value={query || ''}
           onChange={ev => search(ev.target.value)}
+          autoFocus={true}
         />
         <SearchIcon />
       </div>
