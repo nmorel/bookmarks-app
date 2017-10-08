@@ -125,8 +125,8 @@ class BookmarkCardComponent extends Component {
                     {highlightResult.author}
                   </span>
                 )}
-                {bookmark.width && bookmark.height && ` - ${bookmark.width}x${bookmark.height}`}
-                {bookmark.duration && ` - ${formatDuration(bookmark.duration)}`}
+                {!!bookmark.width && !!bookmark.height && ` - ${bookmark.width}x${bookmark.height}`}
+                {!!bookmark.duration && ` - ${formatDuration(bookmark.duration)}`}
               </div>
               <div className="BookmarkCard-Url">
                 <a href={bookmark.url} target="_blank" rel="noopener noreferrer">

@@ -18,39 +18,41 @@ export const FormInput = ({
   renderInput,
   renderHelpText,
 }) => {
+  const helperTextId = renderHelpText ? `${property}HelpText` : undefined;
+  const inputProps = {
+    type: 'text',
+    id: property,
+    name: property,
+    'aria-describedby': helperTextId,
+  };
+  if (model && onChange) {
+    inputProps.value = model[property] || '';
+    inputProps.onChange = ev => {
+      let value = ev.target.value;
+
+      if (ev.target.type === 'number' && value) {
+        // We only handle integer
+        value = parseInt(value, 10);
+      }
+
+      onChange(
+        {
+          ...model,
+          [property]: value,
+        },
+        {
+          property,
+          value,
+        }
+      );
+    };
+  }
+
   return (
     <div>
       {renderLabel && renderLabel({htmlFor: property})}
-      {renderInput({
-        type: 'text',
-        id: property,
-        name: property,
-        value: model && onChange ? model[property] || '' : undefined,
-        onChange:
-          model && onChange
-            ? ev => {
-                let value = ev.target.value;
-
-                if (ev.target.type === 'number' && value) {
-                  // We only handle integer
-                  value = parseInt(value, 10);
-                }
-
-                onChange(
-                  {
-                    ...model,
-                    [property]: value,
-                  },
-                  {
-                    property,
-                    value,
-                  }
-                );
-              }
-            : undefined,
-        'aria-describedby': renderHelpText ? `${property}HelpText` : undefined,
-      })}
-      {renderHelpText && renderHelpText({className: 'help-text', id: `${property}HelpText`})}
+      {renderInput(inputProps)}
+      {renderHelpText && renderHelpText({className: 'help-text', id: helperTextId})}
     </div>
   );
 };
