@@ -12,12 +12,12 @@ const providers = [
     match(url) {
       return this.regexp.test(url);
     },
-    // Metadata are retrieved from the api http://vimeo.com/api/v2/video/{videoId}.json
-    // Exemple : http://vimeo.com/api/v2/video/235627725.json
+    // Metadata are retrieved from the api https://vimeo.com/api/v2/video/{videoId}.json
+    // Exemple : https://vimeo.com/api/v2/video/235627725.json
     fetch: async function(url) {
       const videoId = this.regexp.exec(url)[1];
       try {
-        let metadata = await get(`http://vimeo.com/api/v2/video/${videoId}.json`);
+        let metadata = await get(`https://vimeo.com/api/v2/video/${videoId}.json`);
         metadata = metadata && metadata[0];
         return {
           url,
