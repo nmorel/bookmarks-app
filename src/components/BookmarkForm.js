@@ -1,22 +1,11 @@
 import React from 'react';
 import {TagsInput} from './TagsInput';
+import {FormInput} from './FormInput';
 
-export const BookmarkForm = ({bookmark, onChange}) => {
-  const onChangeValue = ev => {
-    const name = ev.target.name;
-    let value = ev.target.value;
-
-    if (ev.target.type === 'number' && value) {
-      // We only handle integer
-      value = parseInt(value, 10);
-    }
-
-    onChange({
-      ...bookmark,
-      [name]: value,
-    });
-  };
-
+/**
+ * Component to include inside a <form> that add all the inputs to edit a bookmark.
+ */
+export const BookmarkForm = ({loading, bookmark, onChange}) => {
   const onChangeTags = tags =>
     onChange({
       ...bookmark,
@@ -25,93 +14,85 @@ export const BookmarkForm = ({bookmark, onChange}) => {
 
   return (
     <div>
-      <div>
-        <label htmlFor="url">Lien *</label>
-        <input
-          ref={url => (this.url = url)}
-          type="url"
-          id="url"
-          name="url"
-          value={bookmark.url || ''}
-          onChange={this.onChangeValue}
-          required
-          disabled
-          placeholder="https://vimeo.com/20853149"
-        />
-      </div>
+      <FormInput
+        property="url"
+        model={bookmark}
+        onChange={onChange}
+        renderLabel={props => <label {...props}>Lien *</label>}
+        renderInput={props => (
+          <input {...props} type="url" placeholder="https://vimeo.com/20853149" required disabled />
+        )}
+      />
 
-      <div>
-        <label htmlFor="title">Titre *</label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          value={bookmark.title || ''}
-          onChange={onChangeValue}
-          required
-          style={{boxSizing: 'border-box', width: '100%', padding: 5, fontSize: 18}}
-          autoFocus={true}
-        />
-      </div>
+      <FormInput
+        property="title"
+        model={bookmark}
+        onChange={onChange}
+        renderLabel={props => <label {...props}>Titre *</label>}
+        renderInput={props => (
+          <input {...props} placeholder="A title" required autoFocus={true} disabled={loading} />
+        )}
+      />
 
-      <div>
-        <label htmlFor="author">Auteur</label>
-        <input
-          type="text"
-          id="author"
-          name="author"
-          value={bookmark.author || ''}
-          onChange={onChangeValue}
-          style={{boxSizing: 'border-box', width: '100%', padding: 5, fontSize: 18}}
-        />
-      </div>
+      <FormInput
+        property="author"
+        model={bookmark}
+        onChange={onChange}
+        renderLabel={props => <label {...props}>Auteur</label>}
+        renderInput={props => <input {...props} placeholder="Alfred Dupont" disabled={loading} />}
+      />
 
       {!!bookmark.kind &&
         bookmark.kind !== 'UNKNOWN' && [
-          <div key="width">
-            <label htmlFor="width">Largeur</label>
-            <input
-              type="number"
-              id="width"
-              name="width"
-              value={bookmark.width || ''}
-              onChange={onChangeValue}
-              style={{boxSizing: 'border-box', width: '100%', padding: 5, fontSize: 18}}
-            />
-          </div>,
-          <div key="height">
-            <label htmlFor="height">Hauteur</label>
-            <input
-              type="number"
-              id="height"
-              name="height"
-              value={bookmark.height || ''}
-              onChange={onChangeValue}
-              style={{boxSizing: 'border-box', width: '100%', padding: 5, fontSize: 18}}
-            />
-          </div>,
+          <FormInput
+            key="width"
+            property="width"
+            model={bookmark}
+            onChange={onChange}
+            renderLabel={props => <label {...props}>Largeur</label>}
+            renderInput={props => (
+              <input {...props} type="number" placeholder="1920" disabled={loading} />
+            )}
+          />,
+          <FormInput
+            key="height"
+            property="height"
+            model={bookmark}
+            onChange={onChange}
+            renderLabel={props => <label {...props}>Hauteur</label>}
+            renderInput={props => (
+              <input {...props} type="number" placeholder="1080" disabled={loading} />
+            )}
+          />,
         ]}
 
       {bookmark.kind === 'VIDEO' && (
-        <div>
-          <label htmlFor="duration">Durée (en seconde)</label>
-          <input
-            type="number"
-            id="duration"
-            name="duration"
-            value={bookmark.duration || ''}
-            onChange={onChangeValue}
-            style={{boxSizing: 'border-box', width: '100%', padding: 5, fontSize: 18}}
-          />
-        </div>
+        <FormInput
+          property="duration"
+          model={bookmark}
+          onChange={onChange}
+          renderLabel={props => <label {...props}>Durée (en seconde)</label>}
+          renderInput={props => (
+            <input {...props} type="number" placeholder="127" disabled={loading} />
+          )}
+        />
       )}
 
-      <div>
-        <label>
-          Tags
-          <TagsInput value={bookmark.tags || []} onChange={onChangeTags} />
-        </label>
-      </div>
+      <FormInput
+        property="tags"
+        renderLabel={props => <label {...props}>Tags</label>}
+        renderInput={props => (
+          <TagsInput
+            inputProps={{
+              ...props,
+              placeholder: 'Ajouter un tag',
+            }}
+            value={bookmark.tags || []}
+            onChange={onChangeTags}
+            disabled={loading}
+          />
+        )}
+      />
     </div>
   );
 };

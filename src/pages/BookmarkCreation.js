@@ -6,10 +6,14 @@ import {BookmarkCard} from '../components/BookmarkCard';
 import {loadMetadataFromUrl} from '../services/metadata';
 import {BookmarkForm} from '../components/BookmarkForm';
 import {BookmarkListQuery} from '../pages/Home';
+import {FormInput} from '../components/FormInput';
 
 const stepUrl = 1;
 const stepInfos = 2;
 
+/**
+ * Page used to create a new bookmark
+ */
 class BookmarkCreationComponent extends Component {
   state = {
     step: stepUrl,
@@ -25,64 +29,6 @@ class BookmarkCreationComponent extends Component {
     });
   }
 
-  onSubmit = async ev => {
-    ev.preventDefault();
-
-    this.setState({
-      loading: true,
-      error: null,
-    });
-
-    if (this.state.step === stepUrl) {
-      if (this.state.error) {
-        this.setState({step: stepInfos, loading: false});
-        return;
-      }
-
-      try {
-        const bookmark = await loadMetadataFromUrl(this.state.bookmark.url);
-        this.setState({
-          step: stepInfos,
-          bookmark,
-          loading: false,
-        });
-      } catch (err) {
-        this.setState({
-          loading: false,
-          error: err,
-        });
-      }
-    } else {
-      try {
-        await this.props.addBookmark(this.state.bookmark);
-        this.props.history.push('/');
-      } catch (err) {
-        this.setState({
-          loading: false,
-          error: err,
-        });
-      }
-    }
-  };
-
-  onChangeValue = ev => {
-    const name = ev.target.name;
-    let value = ev.target.value;
-
-    if (ev.target.type === 'number' && value) {
-      // We only handle integer
-      value = parseInt(value, 10);
-    }
-
-    this.setState(state => ({
-      bookmark: {
-        ...state.bookmark,
-        [name]: value,
-      },
-      error: null,
-    }));
-  };
-
   onChange = bookmark => {
     this.setState({
       bookmark,
@@ -90,37 +36,94 @@ class BookmarkCreationComponent extends Component {
     });
   };
 
+  /**
+   * Submit the first step with the url.
+   * The url is parsed in order to fetch its metadata if possible.
+   */
+  onSubmitUrl = async ev => {
+    ev.preventDefault();
+
+    this.setState({
+      loading: true,
+      error: null,
+    });
+
+    if (this.state.error) {
+      this.setState({step: stepInfos, loading: false});
+      return;
+    }
+
+    try {
+      const bookmark = await loadMetadataFromUrl(this.state.bookmark.url);
+      this.setState({
+        step: stepInfos,
+        bookmark,
+        loading: false,
+      });
+    } catch (err) {
+      this.setState({
+        loading: false,
+        error: err,
+      });
+    }
+  };
+
+  /**
+   * Submit the final step with the full bookmark
+   */
+  onSubmitInfos = async ev => {
+    ev.preventDefault();
+
+    this.setState({
+      loading: true,
+      error: null,
+    });
+
+    try {
+      await this.props.addBookmark(this.state.bookmark);
+      this.props.history.push('/');
+    } catch (err) {
+      this.setState({
+        loading: false,
+        error: err,
+      });
+    }
+  };
+
   render() {
     const {step, bookmark, loading, error} = this.state;
 
     if (step === stepUrl) {
+      // First step
+      // The form contains a single input for the url.
       return (
-        <form onSubmit={this.onSubmit}>
+        <form onSubmit={this.onSubmitUrl}>
           <h3>Saisissez ou collez le lien</h3>
 
-          <div>
-            <label>
+          <FormInput
+            property="url"
+            model={bookmark}
+            onChange={this.onChange}
+            renderInput={props => (
               <input
+                {...props}
                 ref={url => (this.url = url)}
                 type="url"
-                id="url"
-                name="url"
-                value={bookmark.url || ''}
-                onChange={this.onChangeValue}
+                placeholder="https://vimeo.com/20853149"
                 required
                 autoFocus={true}
-                aria-describedby="urlHelpText"
-                placeholder="https://vimeo.com/20853149"
               />
-            </label>
-            <p className="help-text" id="urlHelpText">
-              Si vous saisissez un lien <a href="https://vimeo.com/">Vimeo</a> ou{' '}
-              <a href="https://www.flickr.com/">Flickr</a>, les données associées (titre, image,
-              auteur, etc...) seront automatiquement récupérées.
-              <br />
-              Exemple : https://vimeo.com/20853149
-            </p>
-          </div>
+            )}
+            renderHelpText={props => (
+              <p {...props}>
+                Si vous saisissez un lien <a href="https://vimeo.com/">Vimeo</a> ou{' '}
+                <a href="https://www.flickr.com/">Flickr</a>, les données associées (titre, image,
+                auteur, etc...) seront automatiquement récupérées.
+                <br />
+                Exemple : https://vimeo.com/20853149
+              </p>
+            )}
+          />
 
           {!!error && (
             <p className="error">
@@ -141,8 +144,10 @@ class BookmarkCreationComponent extends Component {
         </form>
       );
     } else {
+      // Second and final step
+      // The form has all the editable fields of a bookmark
       return (
-        <form onSubmit={this.onSubmit}>
+        <form onSubmit={this.onSubmitInfos}>
           <h3>
             {bookmark.service
               ? `Vérifiez les informations obtenues de ${bookmark.service}`
@@ -227,6 +232,7 @@ export const BookmarkCreation = compose(
         addBookmark(bookmark) {
           return mutate({
             variables: bookmark,
+            // We update the home page list
             refetchQueries: [
               {
                 query: BookmarkListQuery,

@@ -14,6 +14,7 @@ it(`returns empty object for empty url`, async () => {
 it(`returns no additional data if the url does not match vimeo or flickr url`, async () => {
   await expect(loadMetadataFromUrl('http://mylife.com/abcd')).resolves.toEqual({
     url: 'http://mylife.com/abcd',
+    kind: 'UNKNOWN',
   });
 });
 
@@ -23,6 +24,7 @@ it(`fails if the vimeo api fails or the video is not found`, async () => {
 
 it(`retrieves the vimeo metadata`, async () => {
   const match = {
+    kind: 'VIDEO',
     service: 'Vimeo',
     title: 'Sarah Drasner - SVG can do that?!',
     author: 'Frontend Conference Zurich',
@@ -35,13 +37,20 @@ it(`retrieves the vimeo metadata`, async () => {
     tags: [],
   };
 
-  await expect(loadMetadataFromUrl('vimeo.com/232158544')).resolves.toMatchObject(match);
-  await expect(loadMetadataFromUrl('http://vimeo.com/232158544/test')).resolves.toMatchObject(
-    match
-  );
+  await expect(loadMetadataFromUrl('vimeo.com/232158544')).resolves.toEqual({
+    url: 'vimeo.com/232158544',
+    ...match,
+  });
+  await expect(loadMetadataFromUrl('http://vimeo.com/232158544/test')).resolves.toEqual({
+    url: 'http://vimeo.com/232158544/test',
+    ...match,
+  });
   await expect(
     loadMetadataFromUrl('https://vimeo.com/album/4754313/video/232158544')
-  ).resolves.toMatchObject(match);
+  ).resolves.toEqual({
+    url: 'https://vimeo.com/album/4754313/video/232158544',
+    ...match,
+  });
 });
 
 it(`fails if the flickr api fails or the photo is not found`, async () => {
@@ -52,6 +61,7 @@ it(`fails if the flickr api fails or the photo is not found`, async () => {
 
 it(`retrieves the flickr metadata`, async () => {
   const match = {
+    kind: 'PHOTO',
     service: 'Flickr',
     title: 'The Bunker',
     author: 'Peter Stewart',
@@ -86,8 +96,14 @@ it(`retrieves the flickr metadata`, async () => {
 
   await expect(
     loadMetadataFromUrl('https://www.flickr.com/photos/shinrya/37189661310/in/explore-2017-10-02/')
-  ).resolves.toMatchObject(match);
+  ).resolves.toEqual({
+    url: 'https://www.flickr.com/photos/shinrya/37189661310/in/explore-2017-10-02/',
+    ...match,
+  });
   await expect(
     loadMetadataFromUrl('http://flickr.com/photos/shinrya/37189661310/in/explore-2017-10-02/')
-  ).resolves.toMatchObject(match);
+  ).resolves.toEqual({
+    url: 'http://flickr.com/photos/shinrya/37189661310/in/explore-2017-10-02/',
+    ...match,
+  });
 });

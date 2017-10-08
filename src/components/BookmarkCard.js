@@ -5,15 +5,23 @@ import {Link} from 'react-router-dom';
 import {EditIcon, DeleteIcon} from './Icon';
 import {Modal} from './Modal';
 import {BookmarkListQuery} from '../pages/Home';
+import {formatDuration} from '../services/format';
 
+/**
+ * Component that shows a bookmark informations in a "card" (mainly used inside list)
+ */
 class BookmarkCardComponent extends Component {
   static fragments = {
     bookmark: gql`
       fragment BookmarkCard on Bookmark {
         id
+        kind
         url
         title
         author
+        width
+        height
+        duration
         thumbnailMedium
         tags
         createdAt
@@ -74,7 +82,9 @@ class BookmarkCardComponent extends Component {
 
               <div className="BookmarkCard-Author">
                 Ajouté le {new Date(bookmark.createdAt).toLocaleDateString()}
-                {!!bookmark.author && ` - Auteur : ${bookmark.author}`}
+                {!!bookmark.author && ` - ${bookmark.author}`}
+                {bookmark.width && bookmark.height && ` - ${bookmark.width}x${bookmark.height}`}
+                {bookmark.duration && ` - ${formatDuration(bookmark.duration)}`}
               </div>
               <div className="BookmarkCard-Url">
                 <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
@@ -83,10 +93,19 @@ class BookmarkCardComponent extends Component {
               </div>
             </div>
             <div className="BookmarkCard-Actions">
-              <Link to={`/${bookmark.id}/edit`}>
+              <Link
+                to={`/${bookmark.id}/edit`}
+                title="Éditer"
+                aria-label={`Éditer le favori ${bookmark.title}`}
+              >
                 <EditIcon />
               </Link>
-              <button type="button" onClick={this.onShowDelete}>
+              <button
+                type="button"
+                onClick={this.onShowDelete}
+                title="Supprimer"
+                aria-label={`Supprimer le favori ${bookmark.title}`}
+              >
                 <DeleteIcon />
               </button>
             </div>
@@ -124,6 +143,7 @@ export const BookmarkCard = compose(
         deleteBookmark(bookmark) {
           return mutate({
             variables: bookmark,
+            // We update the home page list
             refetchQueries: [
               {
                 query: BookmarkListQuery,

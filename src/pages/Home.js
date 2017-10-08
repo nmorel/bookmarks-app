@@ -8,10 +8,18 @@ import {BookmarkCard} from '../components/BookmarkCard';
 import {Pagination} from '../components/Pagination';
 import {AddIcon} from '../components/Icon';
 
+/**
+ * Home page with the paginated bookmark's list.
+ */
 export function Home() {
   return (
     <div className="Home">
-      <Link className="Home-AddButton" to={`/add`}>
+      <Link
+        className="Home-AddButton"
+        to={`/add`}
+        title="Ajouter un favori"
+        aria-label="Ajouter un favori"
+      >
         <AddIcon />
       </Link>
       <List />
@@ -64,6 +72,7 @@ export const BookmarkListQuery = gql`
 `;
 
 const List = compose(
+  // The pagination options are stored in redux
   connect(
     ({bookmarkListVariables}) => ({bookmarkListVariables}),
     dispatch => bindActionCreators({goToPage}, dispatch)

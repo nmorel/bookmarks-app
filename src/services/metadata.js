@@ -1,12 +1,19 @@
 import {get} from './fetch';
 
+// List of the supported providers.
+// They are used to fetch the metadata of a video/image from its url.
 const providers = [
   {
     service: 'Vimeo',
+    // Exemples of url :
+    // https://vimeo.com/album/4754313/video/232158544
+    // http://vimeo.com/232158544
     regexp: /^(?:https?:\/\/)?vimeo\.com(?:\/album\/[0-9]+\/video)?\/([0-9]+)(?:\/.*)?$/i,
     match(url) {
       return this.regexp.test(url);
     },
+    // Metadata are retrieved from the api http://vimeo.com/api/v2/video/{videoId}.json
+    // Exemple : http://vimeo.com/api/v2/video/235627725.json
     fetch: async function(url) {
       const videoId = this.regexp.exec(url)[1];
       try {
@@ -17,7 +24,6 @@ const providers = [
           service: this.service,
           kind: 'VIDEO',
           title: metadata.title,
-          description: metadata.description,
           author: metadata.user_name,
           duration: parseInt(metadata.duration || 0, 10),
           width: parseInt(metadata.width || 0, 10),
@@ -38,10 +44,14 @@ const providers = [
   },
   {
     service: 'Flickr',
+    // Exemples of url :
+    // https://www.flickr.com/photos/shinrya/37189661310/in/explore-2017-10-02/
     regexp: /^(?:https?:\/\/)?(?:www\.)?flickr\.com\/photos\/.*\/([0-9]+)(?:\/.*)?$/i,
     match(url) {
       return this.regexp.test(url);
     },
+    // Metadata are retrieved from the api https://api.flickr.com/services/rest
+    // Exemple : https://api.flickr.com/services/rest?photo_id=37355898516&method=flickr.photos.getInfo&api_key=e313024ac7788e84caa0e8138e6db0e7&format=json&nojsoncallback=1
     fetch: async function(url) {
       const photoId = this.regexp.exec(url)[1];
       try {
@@ -82,7 +92,6 @@ const providers = [
           service: this.service,
           kind: 'PHOTO',
           title: metadata.title._content,
-          description: metadata.description._content,
           author: metadata.owner.realname || metadata.owner.username,
           width: parseInt(originalPhoto.width || 0, 10),
           height: parseInt(originalPhoto.height || 0, 10),
@@ -111,6 +120,6 @@ export async function loadMetadataFromUrl(url) {
   if (provider) {
     return await provider.fetch(url);
   } else {
-    return {url};
+    return {url, kind: 'UNKNOWN'};
   }
 }

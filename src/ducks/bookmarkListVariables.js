@@ -1,4 +1,7 @@
 // This duck is used to handle filter and pagination on bookmark list
+// They are stored in redux because we need them to get the graphql query from Apollo cache
+// and to be able to refetch/update it.
+// http://dev.apollodata.com/react/api-mutations.html#graphql-mutation-options-refetchQueries
 
 const defaultState = {
   offset: 0,

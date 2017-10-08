@@ -4,14 +4,18 @@ import {gql, graphql, compose} from 'react-apollo';
 import {BookmarkCard} from '../components/BookmarkCard';
 import {BookmarkForm} from '../components/BookmarkForm';
 
+/**
+ * Edition of a bookmark
+ */
 class BookmarkEditionComponent extends Component {
   state = {
-    bookmark: null,
+    bookmark: {},
     loading: false,
     error: null,
   };
 
   componentWillMount() {
+    // When the bookmark is loaded, we update the state with it
     if (!this.props.loading) {
       this.setState({
         bookmark: {
@@ -22,6 +26,7 @@ class BookmarkEditionComponent extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // When the bookmark is loaded, we update the state with it
     if (this.props.loading && !nextProps.loading) {
       this.setState({
         bookmark: {
@@ -30,6 +35,13 @@ class BookmarkEditionComponent extends Component {
       });
     }
   }
+
+  onChange = bookmark => {
+    this.setState({
+      bookmark,
+      error: null,
+    });
+  };
 
   onSubmit = async ev => {
     ev.preventDefault();
@@ -50,23 +62,13 @@ class BookmarkEditionComponent extends Component {
     }
   };
 
-  onChange = bookmark => {
-    this.setState({
-      bookmark,
-      error: null,
-    });
-  };
-
   render() {
-    if (this.props.loading) {
-      return null;
-    }
-
-    const {bookmark, loading, error} = this.state;
+    const loading = this.props.loading || this.state.loading;
+    const {bookmark, error} = this.state;
 
     return (
       <form onSubmit={this.onSubmit}>
-        <BookmarkForm bookmark={bookmark} onChange={this.onChange} />
+        <BookmarkForm loading={loading} bookmark={bookmark} onChange={this.onChange} />
         <div className="ButtonGroup">
           <Link className="button hollow secondary" to={`/`}>
             Annuler
@@ -134,6 +136,8 @@ export const BookmarkEdition = compose(
     },
   }),
   graphql(editBookmarkMutation, {
+    // The modifications are stored automatically in Apollo store.
+    // No need to refresh the home page list
     props({mutate}) {
       return {
         updateBookmark(bookmark) {
