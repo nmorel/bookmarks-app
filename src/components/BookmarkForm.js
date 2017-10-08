@@ -20,7 +20,14 @@ export const BookmarkForm = ({loading, bookmark, onChange}) => {
         onChange={onChange}
         renderLabel={props => <label {...props}>Lien *</label>}
         renderInput={props => (
-          <input {...props} type="url" placeholder="https://vimeo.com/20853149" required disabled />
+          <input
+            {...props}
+            type="url"
+            placeholder="https://vimeo.com/20853149"
+            required
+            disabled={loading}
+            autoFocus={true}
+          />
         )}
       />
 
@@ -30,7 +37,7 @@ export const BookmarkForm = ({loading, bookmark, onChange}) => {
         onChange={onChange}
         renderLabel={props => <label {...props}>Titre *</label>}
         renderInput={props => (
-          <input {...props} placeholder="A title" required autoFocus={true} disabled={loading} />
+          <input {...props} placeholder="A title" required disabled={loading} />
         )}
       />
 

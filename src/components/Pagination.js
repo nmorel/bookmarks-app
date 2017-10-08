@@ -116,7 +116,7 @@ export const calculateButtonsPage = (currentPage, nbPages) => {
 
 export const Pagination = ({offset, limit, total, goToPage}) => {
   const currentPage = offset / limit;
-  const nbPages = Math.ceil(total / limit);
+  const nbPages = Math.ceil(total / limit) || 1;
   const pages = calculateButtonsPage(currentPage, nbPages);
   return (
     <div className="Pagination">

@@ -7,10 +7,16 @@
     align-items: center;
     justify-content: center;
     width: 30%;
+    padding: 0 rem-calc(10) 0 0;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
   }
 
   &-InfosContainer {
-    width: 68%;
+    width: 70%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -32,6 +38,7 @@
   &-Author {
     color: color(grey, dark);
     font-style: italic;
+    margin-bottom: rem-calc(2);
   }
 
   &-Url {
@@ -40,10 +47,11 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    margin-bottom: rem-calc(2);
   }
 
   &-Tags {
-    margin-top: rem-calc(8);
+    margin-top: rem-calc(6);
   }
 
   &-Tag {
@@ -64,5 +72,47 @@
       cursor: pointer;
       outline: 0;
     }
+  }
+
+  @include breakpoint(small only) {
+    flex-direction: column;
+    &-ImageContainer {
+      width: 100%;
+      padding: 0 0 rem-calc(10) 0;
+
+      &.noimage {
+        display: none;
+      }
+    }
+
+    &-InfosContainer {
+      width: 100%;
+    }
+  }
+
+  &.stub &-InfosWrapper {
+    display: block;
+  }
+
+  &.stub &-Title,
+  &.stub &-Author,
+  &.stub &-Url {
+    background-color: color(grey, light);
+    color: color(grey, light);
+    &::before {
+      content: 'stub';
+    }
+  }
+
+  &.stub &-Title {
+    max-width: 80%;
+  }
+
+  &.stub &-Author {
+    max-width: 50%;
+  }
+
+  &.stub &-Url {
+    max-width: 90%;
   }
 }

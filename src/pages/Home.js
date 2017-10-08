@@ -38,17 +38,19 @@ const ListComponent = ({
   return (
     <div>
       {pagination}
-      {bookmarks.length ? (
-        <ul className="Home-List">
-          {bookmarks.map((bookmark, index) => (
-            <li key={bookmark.id} className="Home-List-Item">
-              <BookmarkCard bookmark={bookmark} />
-            </li>
-          ))}
-        </ul>
-      ) : loading ? (
-        <div>Chargement...</div>
-      ) : null}
+      <ul className="Home-List">
+        {loading
+          ? [...Array(limit).keys()].map(index => (
+              <li key={index} className="Home-List-Item">
+                <BookmarkCard stub />
+              </li>
+            ))
+          : bookmarks.map((bookmark, index) => (
+              <li key={bookmark.id} className="Home-List-Item">
+                <BookmarkCard bookmark={bookmark} stub={false} />
+              </li>
+            ))}
+      </ul>
       {pagination}
     </div>
   );

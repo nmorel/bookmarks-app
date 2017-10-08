@@ -87,6 +87,7 @@ const getBookmark = gql`
     bookmark: Bookmark(id: $id) {
       id
       kind
+      url
       title
       author
       width

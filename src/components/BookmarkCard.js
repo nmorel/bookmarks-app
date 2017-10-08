@@ -5,7 +5,9 @@ import {Link} from 'react-router-dom';
 import {EditIcon, DeleteIcon} from './Icon';
 import {Modal} from './Modal';
 import {BookmarkListQuery} from '../pages/Home';
+import {Image} from './Image';
 import {formatDuration} from '../services/format';
+import cn from 'classnames';
 
 /**
  * Component that shows a bookmark informations in a "card" (mainly used inside list)
@@ -38,9 +40,13 @@ class BookmarkCardComponent extends Component {
   onDelete = () => this.props.deleteBookmark(this.props.bookmark);
 
   render() {
-    const {bookmark} = this.props;
+    let {bookmark, stub} = this.props;
+    if (stub) {
+      bookmark = {};
+    }
+
     return (
-      <div className="BookmarkCard">
+      <div className={cn('BookmarkCard', {stub})} aria-hidden={!!stub}>
         {this.state.showDelete && (
           <Modal onClose={this.onCancelDelete}>
             <h4>Confirmer la suppression de {bookmark.title} ?</h4>
@@ -65,9 +71,9 @@ class BookmarkCardComponent extends Component {
           </Modal>
         )}
 
-        <div className="BookmarkCard-ImageContainer">
+        <div className={cn('BookmarkCard-ImageContainer', {noimage: !bookmark.thumbnailMedium})}>
           <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
-            <img src={bookmark.thumbnailMedium} alt={bookmark.title} style={{width: '100%'}} />
+            <Image src={bookmark.thumbnailMedium} alt={bookmark.title} />
           </a>
         </div>
 
@@ -75,13 +81,18 @@ class BookmarkCardComponent extends Component {
           <div className="BookmarkCard-InfosWrapper">
             <div className="BookmarkCard-Infos">
               <h2 className="BookmarkCard-Title">
-                <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
-                  {bookmark.title}
-                </a>
+                {bookmark.url ? (
+                  <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
+                    {bookmark.title}
+                  </a>
+                ) : (
+                  bookmark.title
+                )}
               </h2>
 
               <div className="BookmarkCard-Author">
-                Ajouté le {new Date(bookmark.createdAt).toLocaleDateString()}
+                {!!bookmark.createdAt &&
+                  `Ajouté le ${new Date(bookmark.createdAt).toLocaleDateString()}`}
                 {!!bookmark.author && ` - ${bookmark.author}`}
                 {bookmark.width && bookmark.height && ` - ${bookmark.width}x${bookmark.height}`}
                 {bookmark.duration && ` - ${formatDuration(bookmark.duration)}`}
@@ -92,23 +103,25 @@ class BookmarkCardComponent extends Component {
                 </a>
               </div>
             </div>
-            <div className="BookmarkCard-Actions">
-              <Link
-                to={`/${bookmark.id}/edit`}
-                title="Éditer"
-                aria-label={`Éditer le favori ${bookmark.title}`}
-              >
-                <EditIcon />
-              </Link>
-              <button
-                type="button"
-                onClick={this.onShowDelete}
-                title="Supprimer"
-                aria-label={`Supprimer le favori ${bookmark.title}`}
-              >
-                <DeleteIcon />
-              </button>
-            </div>
+            {!stub && (
+              <div className="BookmarkCard-Actions">
+                <Link
+                  to={`/${bookmark.id}/edit`}
+                  title="Éditer"
+                  aria-label={`Éditer le favori ${bookmark.title}`}
+                >
+                  <EditIcon />
+                </Link>
+                <button
+                  type="button"
+                  onClick={this.onShowDelete}
+                  title="Supprimer"
+                  aria-label={`Supprimer le favori ${bookmark.title}`}
+                >
+                  <DeleteIcon />
+                </button>
+              </div>
+            )}
           </div>
 
           {!!bookmark.tags &&
